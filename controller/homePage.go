@@ -22,6 +22,7 @@ func (hp *HomePage) Home(w http.ResponseWriter, r *http.Request) {
 	fi, err := os.Stat(path)
 	if os.IsNotExist(err) || fi.IsDir() {
 		hp.logger.Println("path not found", path)
+		path = filepath.Join("/home/opc/templates", "home.html")
 		// return
 	}
 	// if err != nil {

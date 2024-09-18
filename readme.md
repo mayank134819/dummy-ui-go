@@ -1,11 +1,33 @@
 Build command
 
-`env GOOS=linux GOARCH=amd64 go build` 
+`env GOOS=linux GOARCH=amd64 go build`
 
 upload to server
 
 ```scp -i ~/Downloads/ssh-key-2024-09-18.key templates/home.html opc@144.25.93.47:~/  ```
 
-run on server 
+upload HTML templates
 
-`./partner-dummy-env`
+`
+scp -i ~/Downloads/ssh-key-2024-09-18.key templates/home.html opc@144.25.93.47:~/templates/home.html
+`
+
+
+ssh to server
+
+`ssh opc@144.25.93.47 -i ~/Downloads/ssh-key-2024-09-18.key`
+
+
+start, stop and check status of service
+
+`
+sudo systemctl start partnerenv.service
+sudo systemctl status partnerenv.service
+sudo systemctl stop partnerenv.service
+`
+
+Check log of service
+
+`
+journalctl -u partnerenv
+`
