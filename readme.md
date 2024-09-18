@@ -18,10 +18,11 @@ ssh to server
 `ssh opc@144.25.93.47 -i ~/Downloads/ssh-key-2024-09-18.key`
 
 
-start, stop and check status of service
+start, restart, stop and check status of service
 
 `
 sudo systemctl start partnerenv.service
+sudo systemctl restart partnerenv.service
 sudo systemctl status partnerenv.service
 sudo systemctl stop partnerenv.service
 `
