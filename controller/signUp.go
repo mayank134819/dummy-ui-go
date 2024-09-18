@@ -30,7 +30,7 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		su.logger.Println("Error marshaling JSON:", err)
 		return
 	}
-	resp, err := http.Post("https://example.com/api/users", "application/json", bytes.NewBuffer(jsonRequestBody))
+	resp, err := http.Post("http://localhost/api/users", "application/json", bytes.NewBuffer(jsonRequestBody))
 	if err != nil {
 		su.logger.Println("Error making POST request:", err)
 		// return
