@@ -7,21 +7,24 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	config "oracle.com/self/partner-dummy-env/Config"
 	"oracle.com/self/partner-dummy-env/controller"
 )
 
 type App struct {
-	logger *log.Logger
-	server *http.Server
-	router *mux.Router
-	config *config.Config
+	logger       *log.Logger
+	server       *http.Server
+	router       *mux.Router
+	sessionStore *sessions.CookieStore
+	config       *config.Config
 }
 
 func NewApp(config *config.Config, logger *log.Logger) *App {
 	app := &App{
-		logger: logger,
-		config: config,
+		logger:       logger,
+		config:       config,
+		sessionStore: sessions.NewCookieStore([]byte("test-secret-key")),
 	}
 	app.intialization()
 	app.setRouter()
@@ -42,8 +45,8 @@ func (app *App) intialization() {
 }
 
 func (app *App) setRouter() {
-	homepage := controller.NewHomePage(app.logger)
-	signup := controller.NewSingUp(app.logger)
+	homepage := controller.NewHomePage(app.logger, app.sessionStore)
+	signup := controller.NewSingUp(app.logger, app.sessionStore)
 
 	app.router.HandleFunc("/", homepage.Home)
 	app.router.HandleFunc("/signup", signup.SignUp)

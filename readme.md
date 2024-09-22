@@ -4,7 +4,9 @@ Build command
 
 upload to server
 
-```scp -i ~/Downloads/ssh-key-2024-09-18.key templates/home.html opc@144.25.93.47:~/  ```
+`
+scp -i ~/Downloads/ssh-key-2024-09-18.key partner-dummy-env opc@144.25.93.47:~/
+`
 
 upload HTML templates
 
@@ -15,7 +17,9 @@ scp -i ~/Downloads/ssh-key-2024-09-18.key templates/home.html opc@144.25.93.47:~
 
 ssh to server
 
-`ssh opc@144.25.93.47 -i ~/Downloads/ssh-key-2024-09-18.key`
+`
+ssh opc@144.25.93.47 -i ~/Downloads/ssh-key-2024-09-18.key
+`
 
 
 start, restart, stop and check status of service
