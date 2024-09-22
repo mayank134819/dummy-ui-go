@@ -127,18 +127,26 @@ a:hover {
         // Initialize
         signUpContainer.style.display = 'none';
 
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+        const st = params.get('st');
+
         document.getElementById('myForm').onsubmit = function(event) {
             event.preventDefault(); 
             const formData = new FormData(this);
 
+            var reqBody = {};
+            formData.forEach(function(value, key){
+                reqBody[key] = value;
+            });
+            reqBody['subscriptionToken'] = st
+            var jsonReqBody = JSON.stringify(reqBody);
+
             fetch('/signup', {
                 method: 'POST',
-                headers: {
-                    'token': "f6b7d946-8f7d-4733-98a4-9b11c784c04b"
-                },
-                body: formData,
-                redirect: 'follow',
-                referrerPolicy: 'unsafe-url'
+                credentials: 'include',
+                withCredntials: true,
+                body: jsonReqBody,
             })
             
             .then(response => {

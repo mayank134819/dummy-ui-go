@@ -29,17 +29,11 @@ func (hp *HomePage) Home(w http.ResponseWriter, r *http.Request) {
 		path = filepath.Join("/home/opc/templates", "home.html")
 	}
 
-	token := r.Header.Get("token")
-	if token == "" {
-		token = "test-token"
-	}
-	session, _ := hp.sessionStore.Get(r, "selfReg")
-	session.Values["selfToken"] = token
-	sessions.Save(r, w)
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins, or specify your domain
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allow specific methods
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allow specific headers
 
 	log.Println("HomePage")
-	if token != "" {
-		w.Header().Set("token", token)
-	}
 	http.ServeFile(w, r, path)
 }

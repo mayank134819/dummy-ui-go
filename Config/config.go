@@ -6,6 +6,6 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		ServerAddr: "0.0.0.0:8000",
+		ServerAddr: "0.0.0.0:80",
 	}
 }

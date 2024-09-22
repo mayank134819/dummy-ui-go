@@ -28,32 +28,32 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 
-	if err := r.ParseForm(); err != nil {
+	var reqBody model.SignUpRequest
+	// Decode the JSON body
+	err := json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	su.logger.Println("username = ", r.FormValue("username"), "password = ", r.FormValue("password"))
-
-	session, _ := su.sessionStore.Get(r, "selfReg")
-	selfToken := session.Values["selfToken"]
-	su.logger.Println("Get token value from session = ", selfToken)
+	su.logger.Println("Form request value =", reqBody)
 
 	requestBody := &model.ActivateRequest{}
 
-	if str, ok := selfToken.(string); ok && str != "" {
-		requestBody.Token = str
-	} else {
+	if reqBody.Token == "" {
 		http.Error(w, "Invalid token", http.StatusBadRequest)
 		return
 	}
 
+	// Create Request body for activation call.
+	requestBody.Token = reqBody.Token
 	su.logger.Println("Self requestBody token is = ", requestBody.Token)
 	jsonRequestBody, err := json.Marshal(requestBody)
 	if err != nil {
 		su.logger.Println("Error marshaling JSON:", err)
 		return
 	}
+	su.logger.Println("jsonRequestBody = ", string(jsonRequestBody))
+
 	// Create a new HTTP client with a timeout
 	client := &http.Client{
 		Timeout: 10 * time.Second, // Set a timeout of 5 seconds
@@ -65,6 +65,11 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	su.logger.Println(resp)
 	defer resp.Body.Close()
+
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins, or specify your domain
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allow specific methods
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allow specific headers
 
 	// Redirect on SELF Page
 	http.Redirect(w, r, "https://oracle.com", http.StatusTemporaryRedirect)
