@@ -148,9 +148,14 @@ a:hover {
                 withCredntials: true,
                 body: jsonReqBody,
             })
-            .then(data => {
-                console.log('Success:', data);
-                window.location.href = "https://www.oracle.com"
+            .then(response => {
+                console.log('Success:', response.ok);
+                if (response.ok) {
+                    window.location.href = "https://www.oracle.com"
+                } else {
+                    console.log(response)
+                    alert("400: "+"Invalid token")
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);

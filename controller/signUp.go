@@ -59,10 +59,10 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		Timeout: 10 * time.Second, // Set a timeout of 5 seconds
 	}
 	resp, err := client.Post("http://138.3.85.250:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
-	if err != nil {
-		su.logger.Println("Error making POST request:", err, jsonRequestBody)
+	if err != nil || resp.StatusCode != 202 {
+		su.logger.Println("Error making POST request:", err)
 		http.Error(w, "Invalid token", http.StatusBadRequest)
-		// return
+		return
 	}
 	su.logger.Println(resp)
 	defer resp.Body.Close()
