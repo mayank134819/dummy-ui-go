@@ -148,17 +148,6 @@ a:hover {
                 withCredntials: true,
                 body: jsonReqBody,
             })
-            
-            .then(response => {
-              if (response.status === 302) { // Check for redirect status
-                  const redirectUrl = response.headers.get('Location');
-                  console.log('Redirect to:', redirectUrl);
-                  window.location.href = "https://www.oracle.com"
-                  // You can make another fetch call to the redirectUrl if needed
-              } else {
-                  return response.json();
-              }
-            })
             .then(data => {
                 console.log('Success:', data);
                 window.location.href = "https://www.oracle.com"

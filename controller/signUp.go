@@ -58,9 +58,10 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{
 		Timeout: 10 * time.Second, // Set a timeout of 5 seconds
 	}
-	resp, err := client.Post("http://138.3.72.134:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
+	resp, err := client.Post("http://138.3.85.250:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
 	if err != nil {
 		su.logger.Println("Error making POST request:", err, jsonRequestBody)
+		http.Error(w, "Invalid token", http.StatusBadRequest)
 		// return
 	}
 	su.logger.Println(resp)
@@ -71,6 +72,8 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allow specific methods
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allow specific headers
 
-	// Redirect on SELF Page
-	http.Redirect(w, r, "https://oracle.com", http.StatusTemporaryRedirect)
+	// Response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Activated"})
 }

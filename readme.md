@@ -34,5 +34,5 @@ sudo systemctl stop partnerenv.service
 Check log of service
 
 `
-journalctl -u partnerenv
+journalctl -u partnerenv -f
 `
