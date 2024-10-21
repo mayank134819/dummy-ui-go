@@ -1,0 +1,11 @@
+[Unit]
+Description=partner-env application
+After=network.target
+
+[Service]
+ExecStart=sh /home/opc/run.sh
+Restart=always
+WorkingDirectory=/home/opc
+
+[Install]
+WantedBy=multi-user.target
