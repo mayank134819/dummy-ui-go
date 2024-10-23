@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	app "oracle.com/self/partner-dummy-env/App"
-	config "oracle.com/self/partner-dummy-env/Config"
+	app "oracle.com/self/partner-test-env/App"
+	config "oracle.com/self/partner-test-env/Config"
 )
 
 func main() {

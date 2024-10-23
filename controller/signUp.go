@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/sessions"
-	"oracle.com/self/partner-dummy-env/model"
+	"oracle.com/self/partner-test-env/model"
 )
 
 type SignUp struct {

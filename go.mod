@@ -1,4 +1,4 @@
-module oracle.com/self/partner-dummy-env
+module oracle.com/self/partner-test-env
 
 go 1.23
 

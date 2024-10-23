@@ -1,2 +1,2 @@
-cp partner-dummy-env partner-dummy-env-cp
-sudo ./partner-dummy-env-cp
+cp partner-test-env partner-test-env-cp
+sudo ./partner-test-env-cp

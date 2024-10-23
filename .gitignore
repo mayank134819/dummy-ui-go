@@ -23,5 +23,5 @@ go.work.sum
 
 # env file
 .env
-partner-dummy-env
+partner-test-env
 .vscode

@@ -5,7 +5,7 @@ Build command
 upload to server
 
 `
-scp -i ~/Downloads/ssh-key-10.key partner-dummy-env opc@144.25.94.205:~/
+scp -i ~/Downloads/ssh-key-10.key partner-test-env opc@144.25.94.205:~/
 `
 
 upload HTML templates
@@ -24,12 +24,15 @@ ssh opc@144.25.94.205 -i ~/Downloads/ssh-key-10.key
 
 start, restart, stop and check status of service
 
-`
+```
 sudo systemctl start partnerenv.service
+
 sudo systemctl restart partnerenv.service
+
 sudo systemctl status partnerenv.service
+
 sudo systemctl stop partnerenv.service
-`
+```
 
 Check log of service
 

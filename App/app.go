@@ -8,8 +8,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	config "oracle.com/self/partner-dummy-env/Config"
-	"oracle.com/self/partner-dummy-env/controller"
+	config "oracle.com/self/partner-test-env/Config"
+	"oracle.com/self/partner-test-env/controller"
 )
 
 type App struct {
