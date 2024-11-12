@@ -1,168 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-}
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
 
-body {
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+    .flex {
+      display: flex;
+      align-items: center;
+    }
 
-.container {
-    width: 400px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-}
+    .container {
+      padding: 0 15px;
+      min-height: 100vh;
+      justify-content: center;
+      background: #f0f2f5;
+    }
+    .container {
+      padding: 0 15px;
+      min-height: 100vh;
+      justify-content: center;
+      background: #f0f2f5;
+    }
+    
+    .form-container {
+      justify-content: space-between;
+      max-width: 1000px;
+      width: 100%;
+    }
 
-.form-container {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-}
+    .facebook-page {
+      justify-content: space-between;
+      max-width: 1000px;
+      width: 100%;
+    }
 
-h1 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-}
+    .facebook-page .text {
+      margin-bottom: 90px;
+      margin-right: 90px;
+    }
 
-input {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
+    .facebook-page h1 {
+      color: #1877f2;
+      font-size: 4rem;
+      margin-bottom: 10px;
+    }
 
-input:focus {
-    border-color: #6a11cb;
-    outline: none;
-}
+    .facebook-page p {
+      font-size: 1.75rem;
+      white-space: nowrap;
+    }
 
-button {
-    margin-top: 10px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: #6a11cb;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
+    form {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
 
-button:hover {
-    background: #2575fc;
-}
+    form input {
+      height: 55px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      padding: 0 14px;
+    }
 
-p {
-    text-align: center;
-    margin-top: 10px;
-}
+    form input:focus {
+      outline: none;
+      border-color: #1877f2;
+    }
 
-a {
-    color: #6a11cb;
-    text-decoration: none;
-}
+    ::placeholder {
+      color: #777;
+      font-size: 1.063rem;
+    }
 
-a:hover {
-    text-decoration: underline;
-}
+    .link {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      gap: 15px;
+    }
+
+    .link .login {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background: #1877f2;
+      padding: 15px 0;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .link .login:hover {
+      background: #0d65d9;
+    }
+
+    form a {
+      text-decoration: none;
+    }
+
+    .link .forgot {
+      color: #1877f2;
+      font-size: 0.875rem;
+    }
+
+    .link .forgot:hover {
+      text-decoration: underline;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #ccc;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    .button {
+      margin-top: 25px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .button a {
+      padding: 15px 20px;
+      background: #42b72a;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1.063rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .button a:hover {
+      background: #3ba626;
+    }
+
+    @media (max-width: 900px) {
+      .facebook-page {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .facebook-page .text {
+        margin-bottom: 30px;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .facebook-page h1 {
+        font-size: 3.5rem;
+      }
+
+      .facebook-page p {
+        font-size: 1.3rem;
+      }
+
+      form {
+        padding: 15px;
+      }
+    }
   </style>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In / Sign Up</title>
-    <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
 <body>
-    <div class="container">
-      <div class="form-container sign-in-container">
-          <form id="myForm" action="signup" method="post">
-              <h1>Sign In</h1>
-              <input name="username" type="username" placeholder="username" value="admin" required />
-              <input name="password" type="password" placeholder="Password" value="admin" required />
-              <button type="submit">Sign In</button>
-              <p>Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a></p>
-          </form>
+  <div class="container flex">
+    <div class="facebook-page flex">
+      <div class="text">
+        <h1>Oracle Partner</h1>
+        <p>Connect with customers around the world</p>
+        <p>on Oracle Partner Site.</p>
       </div>
-        <div class="form-container sign-up-container">
-            <form>
-                <h1>Create Account</h1>
-                <input type="text" placeholder="Name" required />
-                <input type="email" placeholder="Email" required />
-                <input type="password" placeholder="Password" required />
-                <button type="submit">Sign Up</button>
-                <p>Already have an account? <a href="#" id="switch-to-signin">Sign In</a></p>
-            </form>
-        </div>
+      <div class="form-container sign-in-container">
+        <form id="myForm" action="signup" method="post">
+          <!-- <h1>Sign In</h1> -->
+          <input name="username" type="text" placeholder="Username" value="admin" required />
+          <input name="password" type="password" placeholder="Password" value="admin" required />
+          <div class="link">
+            <button type="submit" class="login">Sign In</button>
+            <a href="#" id="switch-to-signup" class="forgot">Don't have an account? Sign Up</a>
+          </div>
+        </form>
+      </div>
+      <div class="form-container sign-up-container" style="display: none;">
+        <form>
+          <!-- <h1>Create Account</h1> -->
+          <input type="text" placeholder="Name" required />
+          <input type="email" placeholder="Email" required />
+          <input type="password" placeholder="Password" required />
+          <div class="link">
+          <button type="submit" class="login">Sign Up</button>
+          <a href="#" id="switch-to-signin" class="forgot">Already have an account? Sign In</a>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const switchToSignUp = document.getElementById('switch-to-signup');
-        const switchToSignIn = document.getElementById('switch-to-signin');
-        const signUpContainer = document.querySelector('.sign-up-container');
-        const signInContainer = document.querySelector('.sign-in-container');
+  <script>
+    const switchToSignUp = document.getElementById('switch-to-signup');
+    const switchToSignIn = document.getElementById('switch-to-signin');
+    const signUpContainer = document.querySelector('.sign-up-container');
+    const signInContainer = document.querySelector('.sign-in-container');
 
-        switchToSignUp.addEventListener('click', () => {
-            signInContainer.style.display = 'none';
-            signUpContainer.style.display = 'flex';
-        });
+    switchToSignUp.addEventListener('click', () => {
+      signInContainer.style.display = 'none';
+      signUpContainer.style.display = 'block';
+    });
 
-        switchToSignIn.addEventListener('click', () => {
-            signUpContainer.style.display = 'none';
-            signInContainer.style.display = 'flex';
-        });
+    switchToSignIn.addEventListener('click', () => {
+      signUpContainer.style.display = 'none';
+      signInContainer.style.display = 'block';
+    });
 
-        // Initialize
-        signUpContainer.style.display = 'none';
+    // Initialize
+    signUpContainer.style.display = 'none';
 
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-        const st = params.get('st');
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const st = params.get('st');
 
-        document.getElementById('myForm').onsubmit = function(event) {
-            event.preventDefault(); 
-            const formData = new FormData(this);
+    document.getElementById('myForm').onsubmit = function(event) {
+      event.preventDefault(); 
+      const formData = new FormData(this);
 
-            var reqBody = {};
-            formData.forEach(function(value, key){
-                reqBody[key] = value;
-            });
-            reqBody['subscriptionToken'] = st
-            var jsonReqBody = JSON.stringify(reqBody);
+      var reqBody = {};
+      formData.forEach(function(value, key){
+        reqBody[key] = value;
+      });
+      reqBody['subscriptionToken'] = st;
+      var jsonReqBody = JSON.stringify(reqBody);
 
-            fetch('/signup', {
-                method: 'POST',
-                credentials: 'include',
-                withCredntials: true,
-                body: jsonReqBody,
-            })
-            .then(response => {
-                console.log('Success:', response.ok);
-                if (response.ok) {
-                    window.location.href = "/showSubscriptionDetails"
-                } else {
-                    console.log(response)
-                    alert("400: "+"Invalid token md")
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert("500: Internal server error")
-                // window.location.href = "https://www.oracle.com"
-            });
-        };
-    </script>
+      fetch('/signup', {
+        method: 'POST',
+        credentials: 'include',
+        body: jsonReqBody,
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = "/showSubscriptionDetails";
+        } else {
+          alert("400: Invalid token md");
+        }
+      })
+      .catch((error) => {
+        alert("500: Internal server error");
+      });
+    };
+  </script>
 </body>
 </html>
