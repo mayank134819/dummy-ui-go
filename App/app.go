@@ -47,9 +47,22 @@ func (app *App) intialization() {
 func (app *App) setRouter() {
 	homepage := controller.NewHomePage(app.logger, app.sessionStore)
 	signup := controller.NewSingUp(app.logger, app.sessionStore)
+	helloWorld := controller.NewHelloWorld(app.logger)
+	sign_in_zoom := controller.NewSignInZoom(app.logger)
+	sign_up_zoom := controller.NewSignUpZoom(app.logger)
+	showSubscriptionDetails := controller.NewShowSubscriptionDetails(app.logger)
 
 	app.router.HandleFunc("/", homepage.Home)
 	app.router.HandleFunc("/signup", signup.SignUp)
+	app.router.HandleFunc("/hello", helloWorld.Hello)
+
+	app.router.HandleFunc("/signupzoom",sign_up_zoom.SignUpZoom)
+	app.router.HandleFunc("/signinzoom",sign_in_zoom.SignInZoom)
+
+	app.router.HandleFunc("/showSubscriptionDetails", showSubscriptionDetails.Show)
+
+	app.router.HandleFunc("/activateSubscription", showSubscriptionDetails.Activate)
+
 }
 
 func (app *App) Run() {

@@ -1,0 +1,33 @@
+<!-- templates/showSubscriptionDetails.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription Details</title>
+</head>
+<body>
+    <h1>Subscription Details</h1>
+    <div id="subscription-details">
+        {{range $key, $value := .}}
+            <p><strong>{{$key}}:</strong> {{$value}}</p>
+        {{end}}
+    </div>
+    <button id="activateButton">Activate Subscription</button>
+
+    <script>
+        document.getElementById('activateButton').onclick = function() {
+            fetch('/activateSubscription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: 'yourTokenHere' }) // Adjust payload as needed
+            })
+            .then(response => {
+                if (response.ok) alert("Subscription activated!");
+                else alert("Activation failed");
+            })
+            .catch(error => console.error('Error:', error));
+        };
+    </script>
+</body>
+</html>
+

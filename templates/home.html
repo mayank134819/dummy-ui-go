@@ -151,10 +151,10 @@ a:hover {
             .then(response => {
                 console.log('Success:', response.ok);
                 if (response.ok) {
-                    window.location.href = "https://www.oracle.com"
+                    window.location.href = "/showSubscriptionDetails"
                 } else {
                     console.log(response)
-                    alert("400: "+"Invalid token")
+                    alert("400: "+"Invalid token md")
                 }
             })
             .catch((error) => {

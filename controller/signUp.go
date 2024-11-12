@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"log"
+	"io"
 	"net/http"
 	"time"
 
@@ -40,7 +41,7 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	requestBody := &model.ActivateRequest{}
 
 	if reqBody.Token == "" {
-		http.Error(w, "Invalid token", http.StatusBadRequest)
+		http.Error(w, "Invalid token md", http.StatusBadRequest)
 		return
 	}
 
@@ -58,14 +59,25 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{
 		Timeout: 10 * time.Second, // Set a timeout of 5 seconds
 	}
-	resp, err := client.Post("http://138.3.85.250:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
+	resp, err := client.Post("http://138.3.95.230:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
 	if err != nil || resp.StatusCode != 202 {
 		su.logger.Println("Error making POST request:", err)
-		http.Error(w, "Invalid token", http.StatusBadRequest)
+		http.Error(w, "Invalid token dm", http.StatusBadRequest)
 		return
 	}
-	su.logger.Println(resp)
+	su.logger.Println("Response is ", resp)
 	defer resp.Body.Close()
+
+	// Read the complete response body
+	responseData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		su.logger.Println("Error reading response body:", err)
+		http.Error(w, "Failed to read response", http.StatusInternalServerError)
+		return
+	}
+	su.logger.Println("Complete Response Data:", string(responseData))
+
+
 
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins, or specify your domain

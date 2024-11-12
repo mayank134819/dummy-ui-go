@@ -1,0 +1,118 @@
+/* Background styling */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #004e92, #000428);
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    animation: fadeInBg 2s ease-in-out;
+}
+
+@keyframes fadeInBg {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Container and form styling */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 1em;
+    font-size: 1.5em;
+    animation: fadeSlideDown 1.2s ease-in-out;
+}
+
+@keyframes fadeSlideDown {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Input fields */
+.form-group {
+    margin-bottom: 1.5em;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.8em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: transform 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #0073e6;
+    outline: none;
+    transform: scale(1.02);
+}
+
+/* Button styling with hover and click effects */
+button {
+    width: 100%;
+    padding: 0.8em;
+    background-color: #0073e6;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    animation: fadeInButton 1.5s ease-in-out;
+}
+
+@keyframes fadeInButton {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+button:hover {
+    background-color: #005bb5;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.footer {
+    margin-top: 1em;
+    font-size: 0.9em;
+    color: #777;
+    animation: fadeInFooter 2s ease-in-out;
+}
+
+@keyframes fadeInFooter {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -16,6 +17,7 @@ func main() {
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
 	conf := config.NewConfig()
 	app := app.NewApp(conf, logger)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	app.Run()
 
 	sigs := make(chan os.Signal, 1)
