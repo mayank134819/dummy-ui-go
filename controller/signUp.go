@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/sessions"
 	"oracle.com/self/partner-test-env/model"
+	"oracle.com/self/partner-test-env/database"
 )
 
 type SignUp struct {
@@ -17,7 +18,7 @@ type SignUp struct {
 	sessionStore *sessions.CookieStore
 }
 
-func NewSingUp(logger *log.Logger, sessionStore *sessions.CookieStore) *SignUp {
+func NewSignUp(logger *log.Logger, sessionStore *sessions.CookieStore) *SignUp {
 	return &SignUp{
 		logger:       logger,
 		sessionStore: sessionStore,
@@ -76,6 +77,35 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	su.logger.Println("Complete Response Data:", string(responseData))
+
+	su.logger.Println("Form data is:", reqBody.Email )
+	su.logger.Println("Form data is:", reqBody.Password )
+
+	// Fetch the user from the database
+	user, err := database.GetUser(reqBody.Email, reqBody.Password)
+	if err != nil {
+		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		return
+	}
+
+	// Create a new session and store user data
+	// session, err := su.sessionStore.Get(r, "session-name")
+	// if err != nil {
+	// 	http.Error(w, "Failed to create session", http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// // Store user ID and email in the session
+	// session.Values["userID"] = user.ID
+	// session.Values["email"] = user.Email
+	// session.Save(r, w)
+
+	su.logger.Println("User signed in successfully:", user.Email)
+
+	///////
+	
+	
+	
 
 
 

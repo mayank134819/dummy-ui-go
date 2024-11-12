@@ -11,10 +11,16 @@ import (
 
 	app "oracle.com/self/partner-test-env/App"
 	config "oracle.com/self/partner-test-env/Config"
+	"oracle.com/self/partner-test-env/database"
 )
 
 func main() {
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
+
+	// Initialize database connection
+	database.InitializeDB()
+	logger.Println("Database initialized successfully.")
+
 	conf := config.NewConfig()
 	app := app.NewApp(conf, logger)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))

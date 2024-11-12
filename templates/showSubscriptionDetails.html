@@ -1,5 +1,5 @@
 <!-- templates/showSubscriptionDetails.html -->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,4 +30,232 @@
     </script>
 </body>
 </html>
+ -->
 
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Database Details</title>
+   <style>
+     * {
+       box-sizing: border-box;
+       margin: 0;
+       padding: 0;
+       font-family: Arial, sans-serif;
+     }
+ 
+     body {
+       background-color: #f5f5f5;
+       color: #333;
+       padding: 20px;
+     }
+ 
+     .container {
+       display: flex;
+       gap: 20px;
+       width: 100%;
+     }
+ 
+     .status-box {
+       width: 240px; /* Increased size */
+       height: 240px; /* Increased size */
+       background-color: #66cc33;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       color: white;
+       border-radius: 8px;
+       text-align: center;
+     }
+ 
+     .status-text h1 {
+       font-size: 72px; /* Increased font size */
+       margin: 0;
+     }
+ 
+     .status-text p {
+       font-size: 18px; /* Increased font size */
+       margin: 0;
+     }
+ 
+     .content {
+       flex: 1;
+       background-color: #fff;
+       border-radius: 8px;
+       padding: 20px;
+       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+     }
+ 
+     header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: 20px;
+     }
+ 
+     header h2 {
+       font-size: 24px;
+     }
+ 
+     .buttons .btn {
+       background-color: #0066cc;
+       color: #fff;
+       border: none;
+       padding: 8px 12px;
+       margin: 0 5px;
+       cursor: pointer;
+       border-radius: 4px;
+       font-size: 14px;
+     }
+ 
+     .buttons .btn:hover {
+       opacity: 0.9;
+     }
+ 
+     .tabs {
+       display: flex;
+       gap: 10px;
+       margin-bottom: 20px;
+     }
+ 
+     .tab-btn {
+       background-color: #f0f0f0;
+       border: none;
+       padding: 8px 12px;
+       cursor: pointer;
+       font-size: 14px;
+       border-radius: 4px;
+     }
+ 
+     .tab-btn.active {
+       background-color: #0066cc;
+       color: white;
+     }
+ 
+     .tab-content {
+       display: none;
+       padding: 10px 0;
+     }
+ 
+     .tab-content.active {
+       display: block;
+     }
+ 
+     .tab-content ul {
+       list-style: none;
+     }
+ 
+     .tab-content li {
+       margin-bottom: 8px;
+     }
+ 
+     .tab-content a {
+       color: #0066cc;
+       text-decoration: none;
+       font-size: 14px;
+       margin-left: 8px;
+     }
+ 
+     .data-guard-section {
+       margin-top: 20px;
+       padding: 15px;
+       border-top: 1px solid #ddd;
+     }
+ 
+     .data-guard-section h3 {
+       font-size: 18px;
+       margin-bottom: 10px;
+     }
+ 
+     .data-guard-section p {
+       font-size: 14px;
+       color: #666;
+       margin-top: 10px;
+     }
+ 
+     .btn.enable {
+       background-color: #0066cc;
+       color: #fff;
+       border: none;
+       padding: 8px 12px;
+       cursor: pointer;
+       border-radius: 4px;
+       font-size: 14px;
+     }
+   </style>
+ </head>
+ <body>
+   <div class="container">
+     <div class="status-box">
+       <div class="status-text">
+         <h1>DB</h1>
+         <p>AVAILABLE</p>
+       </div>
+     </div>
+ 
+     <div class="content">
+       <header>
+         <h2>mengodb</h2>
+         <div class="buttons">
+           <button class="btn">DB Connection</button>
+           <button class="btn">Restore</button>
+           <button class="btn">Apply Tag(s)</button>
+         </div>
+       </header>
+ 
+       <div class="tabs">
+         <button class="tab-btn active" onclick="openTab('information')">Database Information</button>
+         <button class="tab-btn" onclick="openTab('tags')">Tags</button>
+       </div>
+ 
+       <div id="information" class="tab-content active">
+         <ul>
+           <li><strong>Database Home:</strong> dbhome20190503015045</li>
+           <li><strong>Launched:</strong> Fri, 03 May 2019 01:50:45 GMT</li>
+           <li><strong>Database Workload:</strong> OLTP</li>
+           <li><strong>Character Set:</strong> AL32UTF8</li>
+           <li><strong>National Character Set:</strong> AL16UTF16</li>
+           <li><strong>OCID:</strong> <span>...zdnwij</span> <a href="#">Show</a> <a href="#">Copy</a></li>
+           <li><strong>Database Version:</strong> 18.5.0.0.190115</li>
+           <li><strong>Database Unique Name:</strong> mengodb_iad1m7</li>
+           <li><strong>Automatic Backup:</strong> Enabled</li>
+         </ul>
+       </div>
+ 
+       <div id="tags" class="tab-content">
+         <p>No tags applied.</p>
+       </div>
+ 
+       <div class="data-guard-section">
+         <h3>Data Guard Associations</h3>
+         <button class="btn enable">Enable Data Guard</button>
+         <p>Data Guard is not enabled for this database.</p>
+       </div>
+     </div>
+   </div>
+ 
+   <script>
+     function openTab(tabName) {
+       const tabs = document.querySelectorAll('.tab-content');
+       const buttons = document.querySelectorAll('.tab-btn');
+ 
+       tabs.forEach(tab => {
+         tab.classList.remove('active');
+         if (tab.id === tabName) {
+           tab.classList.add('active');
+         }
+       });
+ 
+       buttons.forEach(button => {
+         button.classList.remove('active');
+         if (button.textContent.trim() === tabName.replace(/^\w/, (c) => c.toUpperCase())) {
+           button.classList.add('active');
+         }
+       });
+     }
+   </script>
+ </body>
+ </html>
+ 
