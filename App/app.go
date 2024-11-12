@@ -57,13 +57,14 @@ func (app *App) setRouter() {
 	app.router.HandleFunc("/", homepage.Home)
 	app.router.HandleFunc("/signup", signup.SignUp)
 	app.router.HandleFunc("/signin", signin.SignIn)
-	
+
 	app.router.HandleFunc("/hello", helloWorld.Hello)
 
 	app.router.HandleFunc("/signupzoom",sign_up_zoom.SignUpZoom)
 	app.router.HandleFunc("/signinzoom",sign_in_zoom.SignInZoom)
 
 	app.router.HandleFunc("/showSubscriptionDetails", showSubscriptionDetails.Show)
+	app.router.HandleFunc("/showSubscriptionDetails/{subscriptionToken}", showSubscriptionDetails.Show)
 
 	app.router.HandleFunc("/activateSubscription", showSubscriptionDetails.Activate)
 

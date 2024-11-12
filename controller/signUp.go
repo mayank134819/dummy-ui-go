@@ -80,6 +80,8 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	su.logger.Println("Form data is:", reqBody.Email )
 	su.logger.Println("Form data is:", reqBody.Password )
+	// su.logger.Println("Token fetched is: ", responseData.subscriptionToken)
+
 
 	// Fetch the user from the database
 	user, err := database.GetUser(reqBody.Email, reqBody.Password)
@@ -87,6 +89,53 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 		return
 	}
+
+	// Read and parse the response body
+	var responseMap map[string]interface{}
+	err = json.Unmarshal(responseData, &responseMap)
+	if err != nil {
+		su.logger.Println("Error decoding response body:", err)
+		http.Error(w, "Failed to parse response", http.StatusInternalServerError)
+		return
+	}
+
+	su.logger.Println("Complete Response Data:", responseMap)
+
+	// Extract the subscriptionToken from the response
+	subscriptionToken, ok := responseMap["subscriptionToken"].(string)
+	if !ok || subscriptionToken == "" {
+		su.logger.Println("Subscription token not found in response")
+		http.Error(w, "Failed to retrieve subscription token", http.StatusInternalServerError)
+		return
+	}
+
+	
+
+	// Construct the showSubscriptionDetails URL with the subscriptionToken
+	showSubscriptionDetailsURL := "/showSubscriptionDetails/" + subscriptionToken
+	su.logger.Println("Redirecting to:", showSubscriptionDetailsURL)
+
+	// http.Redirect(w, r, showSubscriptionDetailsURL, http.StatusSeeOther)
+
+	// Set response headers for JSON and CORS (if necessary)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+	// Send the URL as JSON in the response
+	w.WriteHeader(http.StatusAccepted)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "PendingActivation",
+		"url":     showSubscriptionDetailsURL,
+	})
+
+
+
+
+
+	
 
 	// Create a new session and store user data
 	// session, err := su.sessionStore.Get(r, "session-name")
@@ -109,13 +158,13 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 
 
 
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins, or specify your domain
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allow specific methods
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allow specific headers
+	// w.Header().Set("Access-Control-Allow-Credentials", "true")
+	// w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins, or specify your domain
+	// w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allow specific methods
+	// w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allow specific headers
 
-	// Response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Activated"})
+	// // Response
+	// w.Header().Set("Content-Type", "application/json")
+	// w.WriteHeader(http.StatusAccepted)
+	// json.NewEncoder(w).Encode(map[string]string{"message": "Activated"})
 }

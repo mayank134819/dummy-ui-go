@@ -24,6 +24,8 @@ func main() {
 	conf := config.NewConfig()
 	app := app.NewApp(conf, logger)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	log.Println("Setting up static file handler for /images/")
+	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 	app.Run()
 
 	sigs := make(chan os.Signal, 1)

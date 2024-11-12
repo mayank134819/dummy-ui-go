@@ -359,8 +359,8 @@
     // Handle modal close event
     document.getElementById('closeModal').addEventListener('click', function() {
         document.getElementById("popupModal").style.display = "none";
-        // signInContainer.style.display = 'block';
-        // signUpContainer.style.display = 'none';
+        signInContainer.style.display = 'block';
+        signUpContainer.style.display = 'none';
     });
 
     document.getElementById('closeErrorModal').addEventListener('click', function() {
@@ -390,18 +390,32 @@
         credentials: 'include',
         body: jsonReqBody,
       })
-      .then(response => {
-        if (response.ok) {
-          window.location.href = "/showSubscriptionDetails";
+    //   .then(response => {
+        // if (response.ok) {
+        //   window.location.href = "/showSubscriptionDetails";
+        // } else {
+            // document.getElementById("popupErrorModal").style.display = "block";
+        //   alert("400: Invalid token md");
+        // }
+    //   })
+    //   .catch((error) => {
+        // alert("500: Internal server error");
+    //   });
+    // };
+    .then(response => response.json())
+    .then(data => {
+        if(data.url) {
+            window.location.href = data.url
         } else {
             document.getElementById("popupErrorModal").style.display = "block";
-        //   alert("400: Invalid token md");
+            console.log("Failed to load details", data.message);
         }
-      })
-      .catch((error) => {
-        alert("500: Internal server error");
-      });
-    };
+    })
+    .catch(error => {
+        console.error("Error: ", error);
+        document.getElementById("popupErrorModal").style.display = "block";
+    });
+};
 
   </script>
 </body>

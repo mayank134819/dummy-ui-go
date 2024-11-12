@@ -7,6 +7,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"github.com/gorilla/mux"
+	"fmt"
 )
 
 
@@ -19,8 +21,32 @@ func NewShowSubscriptionDetails(logger *log.Logger) *ShowSubscriptionDetails {
 }
 
 func (c *ShowSubscriptionDetails) Show(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	subscriptionToken := vars["subscriptionToken"]
+
+	c.logger.Println("Received request for ShowSubscriptionDetails")
+	c.logger.Println("Subscription Token:", subscriptionToken)
+
+	var apiURL string
+	if subscriptionToken != "" {
+		// Use the subscriptionToken in the API URL
+		apiURL = fmt.Sprintf("http://138.3.95.230:443/20180828/subscriptions/%s", subscriptionToken)
+		c.logger.Println("API URL with subscriptionToken:", apiURL)
+	} else {
+		// Default URL when no subscriptionToken is provided
+		apiURL = "http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq"
+		c.logger.Println("API URL with subscriptionToken:", apiURL)
+	}
+	apiURL = "http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq"
+
+
+
 	// Fetch subscription data from the API
-	resp, err := http.Get("http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq")
+	// Fetch subscription data from the API
+	c.logger.Println("Making GET request to:", apiURL)
+	// resp, err := http.Get("http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq")
+	resp, err := http.Get(apiURL)
 	if err != nil {
 		http.Error(w, "Failed to fetch subscription details", http.StatusInternalServerError)
 		return
@@ -33,14 +59,45 @@ func (c *ShowSubscriptionDetails) Show(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error decoding subscription data", http.StatusInternalServerError)
 		return
 	}
+	c.logger.Println("Decoded subscription data:", subscriptionData)
+
+
+	// Convert subscriptionData to JSON to embed in HTML
+	subscriptionDataJSON, err := json.Marshal(subscriptionData)
+	if err != nil {
+		c.logger.Println("Error marshaling subscription data to JSON:", err)
+		http.Error(w, "Error processing subscription data", http.StatusInternalServerError)
+		return
+	}
 
 	// Render template with data
+	c.logger.Println("Parsing template 'showSubscriptionDetails.html'")
 	tmpl, err := template.ParseFiles("templates/showSubscriptionDetails.html")
 	if err != nil {
+		c.logger.Println("Error parsing template:", err)
 		http.Error(w, "Template not found", http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, subscriptionData)
+
+	// Pass the JSON data to the template
+	c.logger.Println("Rendering template with subscription data")
+	err = tmpl.Execute(w, map[string]interface{}{
+		"SubscriptionDataJSON": template.JS(subscriptionDataJSON), // Pass JSON as a JS-safe string
+	})
+	if err != nil {
+		c.logger.Println("Error executing template:", err)
+	}
+	c.logger.Println("Template rendered successfully")
+
+
+
+	// // Render template with data
+	// tmpl, err := template.ParseFiles("templates/showSubscriptionDetails.html")
+	// if err != nil {
+	// 	http.Error(w, "Template not found", http.StatusInternalServerError)
+	// 	return
+	// }
+	// tmpl.Execute(w, subscriptionData)
 }
 
 func (c *ShowSubscriptionDetails) Activate(w http.ResponseWriter, r *http.Request) {
