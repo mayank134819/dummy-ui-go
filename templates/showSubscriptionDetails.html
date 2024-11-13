@@ -138,17 +138,23 @@
      }
  
      .tab-content {
-       display: none;
-       padding: 10px 0;
-     }
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
  
      .tab-content.active {
        display: block;
      }
  
-     .tab-content ul {
-       list-style: none;
-     }
+
+
+
+        .tab-content ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
  
      .tab-content li {
        margin-bottom: 8px;
@@ -160,6 +166,13 @@
        font-size: 14px;
        margin-left: 8px;
      }
+
+      /* Responsive styling */
+      @media (max-width: 768px) {
+            .tab-content {
+                flex-direction: column;
+            }
+        }
  
      .data-guard-section {
        margin-top: 20px;
@@ -228,13 +241,24 @@
      #container {
         display:none;
      }
+     .info-column {
+            flex: 1;
+            padding: 10px;
+            min-width: 250px
+        }
+    .main-heading {
+        padding-bottom: 50px;
+    }
+    .sub-heading {
+        padding-bottom: 25px;
+    }
    </style>
  </head>
  <body>
     <div class="top-bar">
         <div class="left-side">
             <!-- <img src="../images/logo.png" alt="Partner Logo" class="logo"> -->
-            <span class="partner-site-name">Partner Site</span>
+            <span class="partner-site-name"></span>
         </div>
     </div>
 
@@ -256,35 +280,60 @@
            <button class="btn">Apply Tag(s)</button> -->
          </div>
        </header>
+
+       <h1 class="main-heading">Subscription Details</h1>
  
-       <div class="tabs">
+       <!-- <div class="tabs">
          <button class="tab-btn active" onclick="openTab('information')">Subscription Details</button>
-         <button class="tab-btn" onclick="openTab('tags')">Tags</button>
-       </div>
+         <button class="tab-btn" onclick="openTab('tags')">Other Details</button>
+       </div> -->
  
-       <div id="information" class="tab-content active">
-         <ul>
-           <li><strong>Database Home:</strong> dbhome20190503015045</li>
-           <li><strong>Launched:</strong> Fri, 03 May 2019 01:50:45 GMT</li>
-           <li><strong>Database Workload:</strong> OLTP</li>
-           <li><strong>Character Set:</strong> AL32UTF8</li>
-           <li><strong>National Character Set:</strong> AL16UTF16</li>
+       <div class="tab-content">
+         <!-- <ul>
+           <li><strong>Subscription Name:</strong> dbhome20190503015045</li>
+           <li><strong>Created On:</strong> Fri, 03 May 2019 01:50:45 GMT</li>
+           <li><strong>Plan Name:</strong> OLTP</li>
+           <li><strong>Plan Type:</strong> AL32UTF8</li>
+           <li><strong>Activated On:</strong> AL16UTF16</li>
            <li><strong>OCID:</strong> <span>...zdnwij</span> <a href="#">Show</a> <a href="#">Copy</a></li>
            <li><strong>Database Version:</strong> 18.5.0.0.190115</li>
            <li><strong>Database Unique Name:</strong> mengodb_iad1m7</li>
            <li><strong>Automatic Backup:</strong> Enabled</li>
-         </ul>
+         </ul> -->
+         <div class="info-column">
+            <h3 class="sub-heading">General Information</h3>
+            <ul>
+                <li ><strong>Subscription Name: </strong><span id="subscriptionNameinList"></span> </li>
+                <li><strong >Created On: </strong><span id="createdOn"></span></li>
+                <li><strong >Compartment ID: </strong> <span id="compartmentId"></span></li>
+                <li><strong>Random Field 1: </strong> Lorem </li>
+                <li><strong>Random Field 2: </strong> - </li>
+                <li><strong>Random Field 3: </strong> - </li>
+                
+            </ul>
+        </div>
+        <div class="info-column">
+            <h3 class="sub-heading">Plan Details</h3>
+            <ul>
+                
+                <li><strong >Plan Name: </strong> <span  id="planName"></span></li>
+                <li><strong >Plan Type: </strong><span id="planType"></span> 18.5.0.0.190115</li>
+                <li><strong >Plan Description: </strong> <span id="planDescription"></span></li>
+                <li><strong>Random Field 4:</strong> OLTP</li>
+                <li><strong>Random Field 5:</strong> AL32UTF8</li>
+            </ul>
+        </div>
        </div>
  
        <div id="tags" class="tab-content">
          <p>No tags applied.</p>
        </div>
  
-       <div class="data-guard-section">
+       <!-- <div class="data-guard-section">
          <h3>Data Guard Associations</h3>
          <button class="btn enable">Enable Data Guard</button>
          <p>Data Guard is not enabled for this database.</p>
-       </div>
+       </div> -->
      </div>
    </div>
  
@@ -301,6 +350,13 @@
                 document.getElementById('subscriptionStatus').textContent = 'MD';
                 document.getElementById('lifecycleDetails').textContent = SubscriptionDataJSON.lifecycleDetails || 'No details available';
                 document.getElementById('subscriptionName').textContent = SubscriptionDataJSON.displayName || 'No Data';
+                document.getElementById('subscriptionNameinList').textContent = SubscriptionDataJSON.displayName || 'No Data';
+                document.getElementById('createdOn').textContent = SubscriptionDataJSON.timeCreated || 'No Data';
+                document.getElementById('planName').textContent = SubscriptionDataJSON.subscriptionDetails.pricingPlan.planName || 'No Data';
+                document.getElementById('planType').textContent = SubscriptionDataJSON.subscriptionDetails.pricingPlan.planType || 'No Data';
+                document.getElementById('planDescription').textContent = SubscriptionDataJSON.subscriptionDetails.pricingPlan.planDescription || 'No Data';
+                document.getElementById('compartmentId').textContent = SubscriptionDataJSON.compartmentId || 'No Data';
+
 
                 // Show the content
                 document.getElementById('content').style.display = 'block';

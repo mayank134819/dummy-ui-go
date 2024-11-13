@@ -1,5 +1,5 @@
 package model
 
 type ActivateRequest struct {
-	Token string `json:"subscriptionToken"`
+	Token string `json:"selfToken"`
 }

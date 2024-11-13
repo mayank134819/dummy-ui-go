@@ -101,9 +101,9 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	su.logger.Println("Complete Response Data:", responseMap)
 
-	// Extract the subscriptionToken from the response
-	subscriptionToken, ok := responseMap["subscriptionToken"].(string)
-	if !ok || subscriptionToken == "" {
+	// Extract the selfToken from the response
+	selfToken, ok := responseMap["selfTokenId"].(string)
+	if !ok || selfToken == "" {
 		su.logger.Println("Subscription token not found in response")
 		http.Error(w, "Failed to retrieve subscription token", http.StatusInternalServerError)
 		return
@@ -112,7 +112,7 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	
 
 	// Construct the showSubscriptionDetails URL with the subscriptionToken
-	showSubscriptionDetailsURL := "/showSubscriptionDetails/" + subscriptionToken
+	showSubscriptionDetailsURL := "/showSubscriptionDetails/" + selfToken
 	su.logger.Println("Redirecting to:", showSubscriptionDetailsURL)
 
 	// http.Redirect(w, r, showSubscriptionDetailsURL, http.StatusSeeOther)

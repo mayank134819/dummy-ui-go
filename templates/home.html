@@ -405,7 +405,9 @@
     .then(response => response.json())
     .then(data => {
         if(data.url) {
-            window.location.href = data.url
+            // window.location.href = data.url
+            window.open(data.url, '_blank');
+            window.close();
         } else {
             document.getElementById("popupErrorModal").style.display = "block";
             console.log("Failed to load details", data.message);
