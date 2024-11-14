@@ -100,20 +100,76 @@ func (c *ShowSubscriptionDetails) Show(w http.ResponseWriter, r *http.Request) {
 	// tmpl.Execute(w, subscriptionData)
 }
 
+// func (c *ShowSubscriptionDetails) Activate(w http.ResponseWriter, r *http.Request) {
+// 	var reqBody map[string]string
+// 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+// 		http.Error(w, "Invalid request", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	jsonBody, _ := json.Marshal(map[string]string{"token": reqBody["token"]})
+// 	resp, err := http.Post("http://138.3.95.230:443/20180828/activateSubscription", "application/json", bytes.NewBuffer(jsonBody))
+// 	if err != nil || resp.StatusCode != http.StatusAccepted {
+// 		http.Error(w, "Failed to activate subscription", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	w.WriteHeader(http.StatusOK)
+// 	w.Write([]byte(`{"message": "Subscription activated successfully"}`))
+// }
+
 func (c *ShowSubscriptionDetails) Activate(w http.ResponseWriter, r *http.Request) {
-	var reqBody map[string]string
-	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
-		return
-	}
+    var reqBody map[string]string
+    if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+        log.Printf("Error decoding request body: %v", err)
+        http.Error(w, "Invalid request", http.StatusBadRequest)
+        return
+    }
 
-	jsonBody, _ := json.Marshal(map[string]string{"token": reqBody["token"]})
-	resp, err := http.Post("http://138.3.95.230:443/20180828/activateSubscription", "application/json", bytes.NewBuffer(jsonBody))
-	if err != nil || resp.StatusCode != http.StatusAccepted {
-		http.Error(w, "Failed to activate subscription", http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message": "Subscription activated successfully"}`))
+    // Log the received selfTokenId
+    selfTokenId, ok := reqBody["selfTokenId"]
+    if !ok {
+        log.Println("selfTokenId not provided in request body")
+        http.Error(w, "selfTokenId is required", http.StatusBadRequest)
+        return
+    }
+    log.Printf("Activating subscription with selfTokenId: %s", selfTokenId)
+
+    // Prepare the JSON body with the selfTokenId
+    jsonBody, _ := json.Marshal(map[string]string{"selfTokenId": selfTokenId})
+
+    // Log the request URL and payload
+    url := "http://138.3.95.230:443/20180828/partner/subscriptions/actions/activate"
+    log.Printf("Sending PUT request to URL: %s with body: %s", url, jsonBody)
+
+    // Perform the PUT request to the specified endpoint
+    client := &http.Client{}
+    req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(jsonBody))
+    if err != nil {
+        log.Printf("Error creating PUT request: %v", err)
+        http.Error(w, "Failed to create request", http.StatusInternalServerError)
+        return
+    }
+    req.Header.Set("Content-Type", "application/json")
+
+    // Send the request
+    resp, err := client.Do(req)
+    if err != nil {
+        log.Printf("Error sending PUT request: %v", err)
+        http.Error(w, "Failed to activate subscription", http.StatusInternalServerError)
+        return
+    }
+    defer resp.Body.Close()
+
+    // Log the response status
+    log.Printf("Received response with status code: %d", resp.StatusCode)
+    if resp.StatusCode != http.StatusAccepted {
+        log.Printf("Failed to activate subscription, status code: %d", resp.StatusCode)
+        http.Error(w, "Failed to activate subscription", http.StatusInternalServerError)
+        return
+    }
+
+    // Successful activation log
+    log.Println("Subscription activated successfully")
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte(`{"message": "Subscription activated successfully"}`))
 }
-

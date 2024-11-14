@@ -275,7 +275,7 @@
        <header>
          <h2 id="subscriptionName"></h2>
          <div class="buttons">
-           <button class="btn">Activate</button>
+           <button class="btn" id="activateButton" onclick="activateSubscription()">Activate</button>
            <!-- <button class="btn">Restore</button>
            <button class="btn">Apply Tag(s)</button> -->
          </div>
@@ -317,10 +317,10 @@
             <ul>
                 
                 <li><strong >Plan Name: </strong> <span  id="planName"></span></li>
-                <li><strong >Plan Type: </strong><span id="planType"></span> 18.5.0.0.190115</li>
-                <li><strong >Plan Description: </strong> <span id="planDescription"></span></li>
-                <li><strong>Random Field 4:</strong> OLTP</li>
-                <li><strong>Random Field 5:</strong> AL32UTF8</li>
+                <li><strong >Plan Type: </strong><span id="planType"></span> - </li>
+                <li><strong >Plan Description: </strong> <span id="planDescription"> - </span></li>
+                <li><strong>Random Field 4:</strong> - </li>
+                <li><strong>Random Field 5:</strong> - </li>
             </ul>
         </div>
        </div>
@@ -339,7 +339,8 @@
  
    <script>
 
-    const SubscriptionDataJSON = {{.SubscriptionDataJSON}};
+    // const SubscriptionDataJSON = {{.SubscriptionDataJSON}};
+    const SubscriptionDataJSON = {}
     console.log("Subscription Data:", SubscriptionDataJSON);
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -347,7 +348,7 @@
             console.log("Inside Render Page");
             if(Object.keys(SubscriptionDataJSON).length > 0) {
 
-                document.getElementById('subscriptionStatus').textContent = 'MD';
+                document.getElementById('subscriptionStatus').textContent = 'S';
                 document.getElementById('lifecycleDetails').textContent = SubscriptionDataJSON.lifecycleDetails || 'No details available';
                 document.getElementById('subscriptionName').textContent = SubscriptionDataJSON.displayName || 'No Data';
                 document.getElementById('subscriptionNameinList').textContent = SubscriptionDataJSON.displayName || 'No Data';
@@ -372,6 +373,86 @@
 
     // document.getElementById('subscriptionStatus').textContent = 'MD';
     // document.getElementById('lifecycleDetails').textContent = SubscriptionDataJSON?.lifecycleDetails || 'No details available';
+
+    // Function to get the selfTokenId from the URL
+
+    function getSelfTokenIdFromUrl() {
+        const url = window.location.href;
+        const urlParts = url.split('/');
+        const selfTokenId = urlParts[urlParts.length - 1];
+        console.log("Extracted selfTokenId from URL:", selfTokenId); // Log the extracted selfTokenId
+        return selfTokenId;
+    }
+
+    async function activateSubscription() {
+        const selfTokenId = getSelfTokenIdFromUrl();
+
+        if (!selfTokenId) {
+            console.error("selfTokenId not found in URL"); // Log error if selfTokenId is missing
+            alert("Invalid selfTokenId in the URL.");
+            return;
+        }
+
+        console.log("Starting activation process for selfTokenId:", selfTokenId); // Log start of activation process
+
+        try {
+            // Log the request details
+            const url = 'http://138.3.95.230:443/20180828/partner/subscriptions/actions/activate';
+            console.log("Sending PUT request to URL:", url);
+            console.log("Request payload:", JSON.stringify({ selfTokenId: selfTokenId }));
+
+            // Send a PUT request to the activate endpoint with the selfTokenId
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selfTokenId: selfTokenId })
+            });
+
+            console.log("Response status code:", response.status); // Log the response status code
+
+            // Check if the request was successful
+            if (response.ok) {
+                const result = await response.json();
+                console.log("Activation successful:", result); // Log successful activation response
+                const displayName = result.displayName;
+
+                alert(`Activation Successful for ${displayName}`);
+
+                // SubscriptionDataJSON = result;
+
+                console.log("added data to SubscriptionDataJSON variable", result);
+
+                // Disable the "Activate" button after successful activation
+                activateButton.disabled = true;
+                activateButton.textContent = "Activated";
+
+                document.getElementById('lifecycleDetails').textContent = result.lifecycleDetails || 'No details available';
+                document.getElementById('subscriptionName').textContent = result.displayName || 'No details available';
+                document.getElementById('subscriptionNameinList').textContent = result.displayName || 'No details available';
+                document.getElementById('createdOn').textContent = result.timeStart || 'No details available';
+                
+
+
+
+                // alert("Activation Successful for Subscription ", result.displayName); // Notify the user of successful activation
+            } else {
+                console.error("Failed to activate subscription. Status code:", response.status); // Log failure details
+                alert("Failed to activate subscription");
+            }
+        } catch (error) {
+            console.error("Error during activation request:", error); // Log any errors that occur
+            alert("An error occurred while activating the subscription");
+        }
+    }
+
+
+
+
+
+
+
 
 
 
