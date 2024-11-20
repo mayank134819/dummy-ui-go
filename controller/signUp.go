@@ -60,6 +60,19 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{
 		Timeout: 10 * time.Second, // Set a timeout of 5 seconds
 	}
+
+	su.logger.Println("Form data is:", reqBody.Email )
+	su.logger.Println("Form data is:", reqBody.Password )
+	// su.logger.Println("Token fetched is: ", responseData.subscriptionToken)
+
+
+	// Fetch the user from the database
+	user, err := database.GetUser(reqBody.Email, reqBody.Password)
+	if err != nil {
+		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		return
+	}
+
 	resp, err := client.Post("http://138.3.95.230:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
 	if err != nil || resp.StatusCode != 202 {
 		su.logger.Println("Error making POST request:", err)
@@ -78,17 +91,7 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	su.logger.Println("Complete Response Data:", string(responseData))
 
-	su.logger.Println("Form data is:", reqBody.Email )
-	su.logger.Println("Form data is:", reqBody.Password )
-	// su.logger.Println("Token fetched is: ", responseData.subscriptionToken)
-
-
-	// Fetch the user from the database
-	user, err := database.GetUser(reqBody.Email, reqBody.Password)
-	if err != nil {
-		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
-		return
-	}
+	
 
 	// Read and parse the response body
 	var responseMap map[string]interface{}
@@ -101,18 +104,18 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	su.logger.Println("Complete Response Data:", responseMap)
 
-	// Extract the selfToken from the response
-	selfToken, ok := responseMap["selfTokenId"].(string)
-	if !ok || selfToken == "" {
-		su.logger.Println("Subscription token not found in response")
-		http.Error(w, "Failed to retrieve subscription token", http.StatusInternalServerError)
+	// Extract the subscriptionId from the response
+	subscriptionId, ok := responseMap["subscriptionId"].(string)
+	if !ok || subscriptionId == "" {
+		su.logger.Println("SubscriptionId not found in response")
+		http.Error(w, "Failed to retrieve subscription id", http.StatusInternalServerError)
 		return
 	}
 
 	
 
 	// Construct the showSubscriptionDetails URL with the subscriptionToken
-	showSubscriptionDetailsURL := "/showSubscriptionDetails/" + selfToken
+	showSubscriptionDetailsURL := "/showSubscriptionDetails/" + subscriptionId
 	su.logger.Println("Redirecting to:", showSubscriptionDetailsURL)
 
 	// http.Redirect(w, r, showSubscriptionDetailsURL, http.StatusSeeOther)

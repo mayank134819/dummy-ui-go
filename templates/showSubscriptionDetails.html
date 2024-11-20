@@ -339,8 +339,8 @@
  
    <script>
 
-    // const SubscriptionDataJSON = {{.SubscriptionDataJSON}};
-    const SubscriptionDataJSON = {}
+    const SubscriptionDataJSON = {{.SubscriptionDataJSON}};
+    // const SubscriptionDataJSON = {}
     console.log("Subscription Data:", SubscriptionDataJSON);
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -399,7 +399,7 @@
             // Log the request details
             const url = 'http://138.3.95.230:443/20180828/partner/subscriptions/actions/activate';
             console.log("Sending PUT request to URL:", url);
-            console.log("Request payload:", JSON.stringify({ selfTokenId: selfTokenId }));
+            console.log("Request payload:", JSON.stringify({ subscriptionId: selfTokenId }));
 
             // Send a PUT request to the activate endpoint with the selfTokenId
             const response = await fetch(url, {
@@ -407,7 +407,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ selfTokenId: selfTokenId })
+                body: JSON.stringify({ subscriptionId: selfTokenId })
             });
 
             console.log("Response status code:", response.status); // Log the response status code

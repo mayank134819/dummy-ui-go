@@ -38,7 +38,7 @@ func (c *ShowSubscriptionDetails) Show(w http.ResponseWriter, r *http.Request) {
 		apiURL = "http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq"
 		c.logger.Println("API URL with subscriptionToken:", apiURL)
 	}
-	apiURL = "http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq"
+	// apiURL = "http://138.3.95.230:443/20180828/subscriptions/ocid1.notreviewedplaceholder.dev.dev.amaaaaaapi24rzaax7bhk6arz3jslujgylqcf3lnrsgildtphygl3tjalloq"
 
 
 
