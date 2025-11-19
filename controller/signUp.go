@@ -3,14 +3,14 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/sessions"
-	"oracle.com/self/partner-test-env/model"
 	"oracle.com/self/partner-test-env/database"
+	"oracle.com/self/partner-test-env/model"
 )
 
 type SignUp struct {
@@ -61,19 +61,23 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		Timeout: 10 * time.Second, // Set a timeout of 5 seconds
 	}
 
-	su.logger.Println("Form data is:", reqBody.Email )
-	su.logger.Println("Form data is:", reqBody.Password )
+	su.logger.Println("Form data email is:", reqBody.Email)
+	su.logger.Println("Form data password is:", reqBody.Password)
 	// su.logger.Println("Token fetched is: ", responseData.subscriptionToken)
-
 
 	// Fetch the user from the database
 	user, err := database.GetUser(reqBody.Email, reqBody.Password)
 	if err != nil {
-		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		http.Error(w, "Invalid email or password - debug", http.StatusUnauthorized)
 		return
 	}
 
 	resp, err := client.Post("http://138.3.95.230:443/20180828/subscriptions/resolve", "application/json", bytes.NewBuffer(jsonRequestBody))
+	su.logger.Println("POST /subscriptions/resolve error:", err)
+	if resp != nil {
+		su.logger.Println("POST /subscriptions/resolve status:", resp.StatusCode)
+	}
+
 	if err != nil || resp.StatusCode != 202 {
 		su.logger.Println("Error making POST request:", err)
 		http.Error(w, "Invalid token dm", http.StatusBadRequest)
@@ -90,8 +94,6 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	su.logger.Println("Complete Response Data:", string(responseData))
-
-	
 
 	// Read and parse the response body
 	var responseMap map[string]interface{}
@@ -111,8 +113,6 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to retrieve subscription id", http.StatusInternalServerError)
 		return
 	}
-
-	
 
 	// Construct the showSubscriptionDetails URL with the subscriptionToken
 	showSubscriptionDetailsURL := "/showSubscriptionDetails/" + subscriptionId
@@ -134,12 +134,6 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 		"url":     showSubscriptionDetailsURL,
 	})
 
-
-
-
-
-	
-
 	// Create a new session and store user data
 	// session, err := su.sessionStore.Get(r, "session-name")
 	// if err != nil {
@@ -155,11 +149,6 @@ func (su *SignUp) SignUp(w http.ResponseWriter, r *http.Request) {
 	su.logger.Println("User signed in successfully:", user.Email)
 
 	///////
-	
-	
-	
-
-
 
 	// w.Header().Set("Access-Control-Allow-Credentials", "true")
 	// w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins, or specify your domain
